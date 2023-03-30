@@ -10,10 +10,12 @@ def main() -> int:
     num_patients = 40
     num_doctors = 3
     patient_locations = random.choices(list(turkey_map.keys()), k=num_patients)
+    doctor_locations = random.choices(list(turkey_map.keys()), k=num_doctors)
 
     print("######## MEDICAL AID ALLOCATION OPTIMIZATION PROBLEM ########")
     print("Number of cities: {num_cities}".format(num_cities=num_cities))
     print("Number of doctors: {num_doctors}".format(num_doctors=num_doctors))
+    print("Doctor locations (repetition allowed): {doctor_locations}".format(doctor_locations=doctor_locations))
     print("Number of patients: {num_patients}".format(num_patients=num_patients))
     print("Patient locations (repetition allowed): {patient_locations}".format(patient_locations=patient_locations))
 
