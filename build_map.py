@@ -1,6 +1,6 @@
 import csv
 
-def build_city_graph(filename):
+def build_graph(filename):
     file = open(filename, "r")
     map_data = list(csv.DictReader(file, delimiter=","))
     file.close()

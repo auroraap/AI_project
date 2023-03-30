@@ -1,11 +1,12 @@
 import sys
 import random
-from build_map import build_city_graph
-from pprint import pprint
+from build_map import build_graph
 
 def main() -> int:
+    # Build map from dataset
+    turkey_map = build_graph("distances.csv")
 
-    turkey_map = build_city_graph("distances.csv")
+    # Problem definition
     num_cities = len(turkey_map)
     num_patients = 40
     num_doctors = 3
