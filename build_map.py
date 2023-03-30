@@ -22,6 +22,4 @@ def build_city_graph(filename):
         graph[node]["neighbors"].append(neighbor)
         graph[node]["distances"].append(distance)
 
-    print("Number of nodes: {num_nodes}".format(num_nodes=len(graph)))
-
     return graph
