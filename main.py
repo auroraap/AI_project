@@ -1,13 +1,17 @@
 import random
 import sys
 
-from build_map import build_graph
+from build_map import build_graph, get_coordinates
 from brute_force import brute_force_search
 from evaluate_solution import evaluate
 
 def main() -> int:
     # Build map from dataset
     turkey_map = build_graph("distances.csv")
+
+    ans = input("Run coordinate collection (y/n)? ")
+    if ans == 'y':
+        get_coordinates(turkey_map)
 
     # Problem definition
     num_cities = len(turkey_map)
@@ -23,9 +27,9 @@ def main() -> int:
     print("Number of patients: {num_patients}".format(num_patients=num_patients))
     print("Patient locations (repetition allowed): {patient_locations}\n\n".format(patient_locations=patient_locations))
 
+    print("######## Brute force result ########")
     brute_force_solution = brute_force_search(graph=turkey_map, patient_locations=patient_locations, doctor_locations=doctor_locations)
     brute_force_performance = evaluate(brute_force_solution, num_doctors)
-    print("######## Brute force result ########")
     print("Total distance travelled: {total_dist}".format(total_dist = brute_force_performance[0]))
     print("Travel distance distribution index: {total_dist}\n\n".format(total_dist = brute_force_performance[1]))
 
