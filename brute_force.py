@@ -23,21 +23,21 @@ def brute_force_search(graph, patient_locations, doctor_locations):
             for neighbor_index, neighbor in enumerate(graph[doctor_location]["neighbors"]):
                 # Iterate through neighbors of the current selected doctor
                 if neighbor in patient_locations:
+                    # Go to patient location if it is a neighbor
                     # Remove location from patient list
                     patient_locations = list(filter((neighbor).__ne__, patient_locations))
+                    # Store the step
                     doctor_step_length = graph[doctor_location]["distances"][neighbor_index]
-                    # Go to patient location if it is a neighbor
                     doctor_locations[doctor_index] = neighbor
                     doctor_step = {"location": doctor_location, "step length": doctor_step_length}
 
-                    
                     break
             if not doctor_step:
-                # If no neighbor was a patient location, choose next location at random
+                # If no neighbor is a patient location, choose next location at random
                 neighbor_index = random.randrange(start=0,stop=len(graph[doctor_location]["neighbors"])-1)
+                # Store the step
                 doctor_step_length = graph[doctor_location]["distances"][neighbor_index]
                 doctor_locations[doctor_index] = graph[doctor_location]["neighbors"][neighbor_index]
-
                 doctor_step = {"location": doctor_location, "step length": doctor_step_length}
                 
             # add location to solution
