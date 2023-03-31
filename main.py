@@ -1,6 +1,8 @@
-import sys
 import random
+import sys
+
 from build_map import build_graph
+from brute_force import brute_force_search
 
 def main() -> int:
     # Build map from dataset
@@ -21,6 +23,8 @@ def main() -> int:
     print("Patient locations (repetition allowed): {patient_locations}".format(patient_locations=patient_locations))
 
     # Run the different algorithms to get solutions for the paths of the 3 doctors
+    brute_force_solution = brute_force_search(graph=turkey_map, patient_locations=patient_locations, doctor_locations=doctor_locations)
+    print(brute_force_solution)
     # Evaluate the solutions with respect to distance travelled in total
 
     return 0
