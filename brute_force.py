@@ -14,10 +14,9 @@ def brute_force_search(graph, patient_locations, doctor_locations):
         if doctor_location in patient_locations:
             patient_locations = list(filter((doctor_location).__ne__, patient_locations))
         # Add initial positions to solution
-        solution[doctor_index].append({doctor_location, 0})
+        solution[doctor_index].append({"location": doctor_location, "step length": 0})
 
     while patient_locations:
-        print(len(patient_locations))
         for doctor_index, doctor_location in enumerate(doctor_locations):
             # Initialize empty step
             doctor_step = {}
