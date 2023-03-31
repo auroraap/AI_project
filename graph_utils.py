@@ -4,6 +4,14 @@ import math
 from geopy.geocoders import Nominatim
 
 def build_graph(filename):
+    """Build a graph with weighted edges.
+
+    Parameters:
+        filename: name of the csv file with the dataset.
+    
+    Returns:
+        Graph in dictionary format. The key is city name, and the values are naighboring cities and distances.
+    """
     file = open(filename, "r")
     map_data = list(csv.DictReader(file, delimiter=","))
     file.close()
@@ -28,6 +36,11 @@ def build_graph(filename):
     return graph
 
 def get_coordinates(graph):
+    """Find longitude and latitude of each city in the graph.
+    
+    Parameters:
+        graph: Dictionary with cities as keys.
+    """
     print("Collecting coordinates. This will take a minute...")
     geolocator = Nominatim(user_agent="Turkey")
     locations = {}
