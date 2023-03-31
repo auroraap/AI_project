@@ -2,8 +2,15 @@ import random
 import time
 
 def brute_force_search(graph, patient_locations, doctor_locations):
-    """
-    Brute force approach to solving the multi doctor graph traversal.
+    """ Solves the TSP with a brute force approach.
+    
+    Parameters:
+        graph: graph containing nodes with lists of neighbors and distances.
+        patient_locations: list of the locations of each patient.
+        doctor_locations: list of the locations of each doctor.
+    
+    Returns:
+        A list containing all the steps that each doctor made.
     """
     start_timespamp = time.time_ns()
 
