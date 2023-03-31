@@ -21,15 +21,13 @@ def main() -> int:
     print("Number of doctors: {num_doctors}".format(num_doctors=num_doctors))
     print("Doctor locations (repetition allowed): {doctor_locations}".format(doctor_locations=doctor_locations))
     print("Number of patients: {num_patients}".format(num_patients=num_patients))
-    print("Patient locations (repetition allowed): {patient_locations}".format(patient_locations=patient_locations))
+    print("Patient locations (repetition allowed): {patient_locations}\n\n".format(patient_locations=patient_locations))
 
-    # Run the different algorithms to get solutions for the paths of the 3 doctors
     brute_force_solution = brute_force_search(graph=turkey_map, patient_locations=patient_locations, doctor_locations=doctor_locations)
     brute_force_performance = evaluate(brute_force_solution, num_doctors)
     print("######## Brute force result ########")
     print("Total distance travelled: {total_dist}".format(total_dist = brute_force_performance[0]))
-    print("Travel distance distribution index: {total_dist}".format(total_dist = brute_force_performance[1]))
-    # Evaluate the solutions with respect to distance travelled in total
+    print("Travel distance distribution index: {total_dist}\n\n".format(total_dist = brute_force_performance[1]))
 
     return 0
 
