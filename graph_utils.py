@@ -40,3 +40,4 @@ def get_coordinates(graph):
     
     with open('turkey_coordinates.json', 'w') as fp:
         json.dump(locations, fp)
+

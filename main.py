@@ -1,7 +1,7 @@
 import random
 import sys
 
-from build_map import build_graph, get_coordinates
+from graph_utils import build_graph, get_coordinates
 from brute_force import brute_force_search
 from evaluate_solution import evaluate
 
