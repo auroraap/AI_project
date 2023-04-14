@@ -36,11 +36,19 @@ def main() -> int:
 
 
     print("######## Brute force with clustering of patients and doctor matching ########")
-    for i in range(3):
+    cluster_ok = False
+    i = 0
+    while not cluster_ok:
+        # Redo clustering step until clusters are more or less evenly sized
         try:
+            i += 1
             clusters = kmeans(json_filename='turkey_coordinates.json', patient_locations=patient_locations, k=num_doctors)
+            for cluster in clusters:
+                if len(cluster) < (num_patients / 6):
+                    raise(ValueError)
+            cluster_ok = True
         except:
-            print("Ill-posed clustering. Retrying. Iteration: {i}".format(i=i))
+            # print("One or more clusters have too fiew elements. Retrying. Iteration: {i}".format(i=i))
             continue
     preferences = cluster_preferences(doctor_locations=doctor_locations, patient_clusters=clusters)
     matching = cluster_matching(preferences=preferences, num_doctors=num_doctors)

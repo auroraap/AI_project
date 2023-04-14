@@ -128,7 +128,7 @@ def kmeans(json_filename, patient_locations, k):
         
         # Check stopping criteria
         if (( new_centroid_long == centroid_long ) and ( new_centroid_lat == centroid_lat )) or ( n_iter == 20 ):
-            print('Number of iterations for clustering: {n_iter}'.format(n_iter=n_iter))
+            # print('Number of iterations for clustering: {n_iter}'.format(n_iter=n_iter))
             stop = True
         # Update centroids
         else:
