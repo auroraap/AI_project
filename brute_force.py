@@ -14,7 +14,7 @@ def brute_force_search(graph, patient_locations, doctor_locations):
     """
     start_timespamp = time.time_ns()
 
-    solution = [[], [], []]
+    solution = [[] for i in range(len(doctor_locations)) ]
 
     # Check if the doctors start at a patient location
     for doctor_index, doctor_location in enumerate(doctor_locations):

@@ -4,6 +4,7 @@ import sys
 from graph_utils import build_graph, get_coordinates, kmeans
 from brute_force import brute_force_search
 from evaluate_solution import evaluate
+from matching import cluster_matching, cluster_preferences
 
 def main() -> int:
     # Build map from dataset
@@ -33,8 +34,23 @@ def main() -> int:
     print("Total distance travelled: {total_dist}".format(total_dist = brute_force_performance[0]))
     print("Travel distance distribution index: {total_dist}\n\n".format(total_dist = brute_force_performance[1]))
 
-    # Algorithm 2
-    clusters = kmeans(json_filename='turkey_coordinates.json', patient_locations=patient_locations, k=num_doctors)
+
+    print("######## Brute force with clustering of patients and doctor matching ########")
+    for i in range(3):
+        try:
+            clusters = kmeans(json_filename='turkey_coordinates.json', patient_locations=patient_locations, k=num_doctors)
+        except:
+            print("Ill-posed clustering. Retrying. Iteration: {i}".format(i=i))
+            continue
+    preferences = cluster_preferences(doctor_locations=doctor_locations, patient_clusters=clusters)
+    matching = cluster_matching(preferences=preferences, num_doctors=num_doctors)
+    dist = 0
+    for i, doctor in enumerate(doctor_locations):
+        cluster = matching[i]
+        brute_force_cluster = brute_force_search(graph=turkey_map, patient_locations=clusters[cluster], doctor_locations=[doctor_locations[i]] )
+        brute_force_performance = evaluate(brute_force_cluster, 1)
+        dist += brute_force_performance[0]
+    print("Total distance travelled: {total_dist}".format(total_dist = dist))
     # Informed search: we have x and y coordinates of each city. Use clustering to create a collection of patients for each doctor.
     # Distribute clusters between doctors.
     # Create a minimal spanning tree for each doctor (Prim/Kruskal)
