@@ -1,6 +1,7 @@
 import csv
 import json
 import math
+import random
 from geopy.geocoders import Nominatim
 
 def build_graph(filename):
@@ -81,9 +82,59 @@ def city_distance_estimate(lon1, lat1, lon2, lat2):
 
     return distance_estimate
 
-def kmeans(json_filename, k):
+def kmeans(json_filename, patient_locations, k):
     # Read json
+    with open(json_filename, 'r') as f:
+        coordinates = json.load(f)
+
     # Initialize k centroids
-    # Loop
+    centroids = random.sample(list(coordinates), k)
+    centroid_long, centroid_lat = [], []
+    for centroid in centroids:
+        centroid_long.append( coordinates[centroid]['longitude'] )
+        centroid_lat.append( coordinates[centroid]['latitude'] )
+    
+    stop = False
+    n_iter = 0
+    
+    while not stop:
+        clusters = [[] for i in range(k) ]
+        clusters_long = [[] for i in range(k) ]
+        clusters_lat = [[] for i in range(k) ]
+        new_centroid_long, new_centroid_lat = [0]*k, [0]*k
+
         # Loop over cities
-        # city_distance_estimate()
+        for location in patient_locations:
+            # Loop over centroids
+            patient_long = coordinates[location]['longitude']
+            patient_lat = coordinates[location]['latitude']
+            dists = []
+            for i in range(k):
+                dist = city_distance_estimate( patient_long, patient_lat, centroid_long[i], centroid_lat[i] )
+                dists.append( dist )
+            # Assign city to nearest centroid
+            min_distance = min(dists)
+            assigned_cluster = dists.index(min_distance)
+            clusters[assigned_cluster].append(location)
+            # Store coordinates of the patient location to ease centroid calculation
+            clusters_long[assigned_cluster].append(patient_long)
+            clusters_lat[assigned_cluster].append(patient_lat)
+         # Calculate new centroids
+        for i in range(k):
+            new_centroid_long[i] = sum(clusters_long[i]) / len(clusters_long[i])
+            new_centroid_lat[i] = sum(clusters_lat[i]) / len(clusters_lat[i])
+        
+        # Check stopping criteria
+        if (( new_centroid_long == centroid_long ) and ( new_centroid_lat == centroid_lat )) or ( n_iter == 20 ):
+            print('Number of iterations for clustering: {n_iter}'.format(n_iter=n_iter))
+            stop = True
+        # Update centroids
+        else:
+            centroid_long = new_centroid_long
+            centroid_lat = new_centroid_lat
+
+        n_iter += 1
+       
+
+    return clusters
+        

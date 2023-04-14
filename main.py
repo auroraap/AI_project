@@ -1,7 +1,7 @@
 import random
 import sys
 
-from graph_utils import build_graph, get_coordinates
+from graph_utils import build_graph, get_coordinates, kmeans
 from brute_force import brute_force_search
 from evaluate_solution import evaluate
 
@@ -34,6 +34,7 @@ def main() -> int:
     print("Travel distance distribution index: {total_dist}\n\n".format(total_dist = brute_force_performance[1]))
 
     # Algorithm 2
+    clusters = kmeans(json_filename='turkey_coordinates.json', patient_locations=patient_locations, k=num_doctors)
     # Informed search: we have x and y coordinates of each city. Use clustering to create a collection of patients for each doctor.
     # Distribute clusters between doctors.
     # Create a minimal spanning tree for each doctor (Prim/Kruskal)
