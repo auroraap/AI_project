@@ -22,7 +22,6 @@ Ağrı,Bitlis,234
 Ağrı,Erzurum,184
 Ağrı,Kars,216
 Ağrı,Muş,245
-Ağrı,Van,230
 Ağrı,Iğdır,143
 Amasya,Çorum,92
 Amasya,Samsun,131
@@ -68,7 +67,6 @@ Bingöl,Tunceli,142
 Bitlis,Ağrı,234
 Bitlis,Muş,83
 Bitlis,Siirt,97
-Bitlis,Van,163
 Bitlis,Batman,135
 Bolu,Ankara,191
 Bolu,Bilecik,213
@@ -165,7 +163,6 @@ Gümüşhane,Erzincan,133
 Gümüşhane,Giresun,163
 Gümüşhane,Trabzon,101
 Gümüşhane,Bayburt,78
-Hakkari,Van,202
 Hakkari,Şırnak,189
 Hatay,Adana,191
 Hatay,Gaziantep,194
@@ -292,7 +289,6 @@ Samsun,Sinop,155
 Samsun,Tokat,230
 Siirt,Bitlis,97
 Siirt,Mardin,231
-Siirt,Van,260
 Siirt,Batman,87
 Siirt,Şırnak,95
 Sinop,Çorum,269
@@ -330,11 +326,6 @@ Uşak,Afyonkarahisar,116
 Uşak,Denizli,150
 Uşak,Kütahya,139
 Uşak,Manisa,195
-Van,Ağrı,230
-Van,Bitlis,163
-Van,Hakkari,202
-Van,Siirt,260
-Van,Şırnak,355
 Yozgat,Amasya,200
 Yozgat,Çorum,108
 Yozgat,Kayseri,197
@@ -372,7 +363,6 @@ Batman,Siirt,87
 Şırnak,Hakkari,189
 Şırnak,Mardin,209
 Şırnak,Siirt,95
-Şırnak,Van,355
 Bartın,Kastamonu,183
 Bartın,Zonguldak,89
 Bartın,Karabük,89
