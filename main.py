@@ -45,10 +45,11 @@ def main() -> int:
             clusters = kmeans(json_filename='turkey_coordinates.json', patient_locations=patient_locations, k=num_doctors)
             for cluster in clusters:
                 if len(cluster) < (num_patients / 6):
+                    # Ensure quite even patient distribution
                     raise(ValueError)
             cluster_ok = True
         except:
-            # print("One or more clusters have too fiew elements. Retrying. Iteration: {i}".format(i=i))
+            # print("One or more clusters have too few elements. Retrying. Iteration: {i}".format(i=i))
             continue
     preferences = cluster_preferences(doctor_locations=doctor_locations, patient_clusters=clusters)
     matching = cluster_matching(preferences=preferences, num_doctors=num_doctors)
@@ -59,7 +60,7 @@ def main() -> int:
         brute_force_performance = evaluate(brute_force_cluster, 1)
         dist += brute_force_performance[0]
     print("Total distance travelled: {total_dist}".format(total_dist = dist))
-    visualize(turkey_map=turkey_map, clusters=clusters)
+    visualize(turkey_map=turkey_map, clusters=clusters, doctors=doctor_locations)
 
     # Informed search: we have x and y coordinates of each city. Use clustering to create a collection of patients for each doctor.
     # Distribute clusters between doctors.

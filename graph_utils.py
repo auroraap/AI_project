@@ -140,12 +140,12 @@ def kmeans(json_filename, patient_locations, k):
 
     return clusters
         
-def visualize(turkey_map, clusters):
+def visualize(turkey_map, clusters, doctors):
     print(clusters)
     G = nx.Graph()
     G.add_nodes_from(turkey_map.keys())
     pos = nx.spring_layout(G)
-    colors = ['#cc99ff', '#0099ff', '#ffcc00', '#d9d9d9']
+    colors = ['#cc99ff', '#0099ff', '#ffcc00', '#ff0000', '#d9d9d9']
 
     color_map = []
     for node in G:
@@ -153,6 +153,8 @@ def visualize(turkey_map, clusters):
         for idx, cluster in enumerate(clusters):
             if node in cluster:
                 color_assigned = colors[idx]
+            if node in doctors:
+                color_assigned = colors[-2]
         color_map.append(color_assigned)
     print(len(color_map))
     for location in turkey_map:
