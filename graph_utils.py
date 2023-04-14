@@ -160,7 +160,6 @@ def visualize(turkey_map, clusters):
             # if not G.has_edge(location, neighbor):
             G.add_edge(location, neighbor, weight=turkey_map[location]['distances'][index])
     
-    nx.draw(G, node_color=color_map, with_labels=True)
-    nx.draw(G, with_labels=True)
+    nx.draw(G, node_color=color_map, with_labels=True, node_size=50, node_shape="s", alpha=0.6, linewidths=10, font_size=6)
     plt.show()
     
