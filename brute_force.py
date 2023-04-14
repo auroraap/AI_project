@@ -41,7 +41,7 @@ def brute_force_search(graph, patient_locations, doctor_locations):
                     break
             if not doctor_step:
                 # If no neighbor is a patient location, choose next location at random
-                neighbor_index = random.randrange(start=0,stop=len(graph[doctor_location]["neighbors"])-1)
+                neighbor_index = random.randint(0,len(graph[doctor_location]["neighbors"])-1)
                 # Store the step
                 doctor_step_length = graph[doctor_location]["distances"][neighbor_index]
                 doctor_locations[doctor_index] = graph[doctor_location]["neighbors"][neighbor_index]
