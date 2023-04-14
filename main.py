@@ -1,7 +1,7 @@
 import random
 import sys
 
-from graph_utils import build_graph, get_coordinates, kmeans
+from graph_utils import build_graph, get_coordinates, kmeans, visualize
 from brute_force import brute_force_search
 from evaluate_solution import evaluate
 from matching import cluster_matching, cluster_preferences
@@ -51,6 +51,8 @@ def main() -> int:
         brute_force_performance = evaluate(brute_force_cluster, 1)
         dist += brute_force_performance[0]
     print("Total distance travelled: {total_dist}".format(total_dist = dist))
+    visualize(turkey_map=turkey_map, clusters=clusters)
+
     # Informed search: we have x and y coordinates of each city. Use clustering to create a collection of patients for each doctor.
     # Distribute clusters between doctors.
     # Create a minimal spanning tree for each doctor (Prim/Kruskal)

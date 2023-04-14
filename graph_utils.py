@@ -1,6 +1,8 @@
 import csv
 import json
 import math
+import matplotlib.pyplot as plt
+import networkx as nx
 import random
 from geopy.geocoders import Nominatim
 
@@ -138,3 +140,27 @@ def kmeans(json_filename, patient_locations, k):
 
     return clusters
         
+def visualize(turkey_map, clusters):
+    print(clusters)
+    G = nx.Graph()
+    G.add_nodes_from(turkey_map.keys())
+    pos = nx.spring_layout(G)
+    colors = ['#cc99ff', '#0099ff', '#ffcc00', '#d9d9d9']
+
+    color_map = []
+    for node in G:
+        color_assigned = colors[-1]
+        for idx, cluster in enumerate(clusters):
+            if node in cluster:
+                color_assigned = colors[idx]
+        color_map.append(color_assigned)
+    print(len(color_map))
+    for location in turkey_map:
+        for index, neighbor in enumerate(turkey_map[location]['neighbors']):
+            # if not G.has_edge(location, neighbor):
+            G.add_edge(location, neighbor, weight=turkey_map[location]['distances'][index])
+    
+    nx.draw(G, node_color=color_map, with_labels=True)
+    nx.draw(G, with_labels=True)
+    plt.show()
+    
