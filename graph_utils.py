@@ -55,26 +55,19 @@ def get_coordinates(graph):
     with open('turkey_coordinates.json', 'w') as fp:
         json.dump(locations, fp)
 
-def city_distance_estimate(city1, city2, cities_json):
+def city_distance_estimate(lon1, lat1, lon2, lat2):
     """ Uses Haversine formula to estimate distance between two cities.
 
     Parameters:
-        city1: Name of city.
-        city2: Name of city.
-        cities_json: JSON containing cities, and their longitude and latitude
+        lon1
+        lat1
+        lon2
+        lat2
 
     Returns:
         Distance bewteen the two cities in km.
     """
-    with open(cities_json) as json_file:
-        cities_dict = json.load(json_file)
-
     earth_radius = 6371*(10**3)
-
-    lon1 = cities_dict[city1]["longitude"]
-    lon2 = cities_dict[city2]["longitude"]
-    lat1 = cities_dict[city1]["latitude"]
-    lat2 = cities_dict[city2]["latitude"]
 
     phi1 = lat1 * math.pi/180
     phi2 = lat2 * math.pi/180
@@ -87,3 +80,10 @@ def city_distance_estimate(city1, city2, cities_json):
     distance_estimate = earth_radius * c / 1000
 
     return distance_estimate
+
+def kmeans(json_filename, k):
+    # Read json
+    # Initialize k centroids
+    # Loop
+        # Loop over cities
+        # city_distance_estimate()
