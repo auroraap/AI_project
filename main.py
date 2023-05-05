@@ -2,7 +2,7 @@ import random
 import sys
 
 from graph_utils import build_graph, get_coordinates, kmeans, visualize
-from brute_force import brute_force_search
+from search_algorithms.brute_force import brute_force_search
 from evaluate_solution import evaluate
 from matching import cluster_matching, cluster_preferences
 
