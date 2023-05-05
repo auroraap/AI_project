@@ -1,9 +1,8 @@
 import random
 import sys
 
-from graph_utils import build_graph, get_coordinates, kmeans, visualize
+from graph_utils import build_graph, get_coordinates, kmeans, visualize, evaluate
 from search_algorithms.brute_force import brute_force_search
-from evaluate_solution import evaluate
 from matching import cluster_matching, cluster_preferences
 
 def main() -> int:
@@ -34,8 +33,7 @@ def main() -> int:
     print("Total distance travelled: {total_dist}".format(total_dist = brute_force_performance[0]))
     print("Travel distance distribution index: {total_dist}\n\n".format(total_dist = brute_force_performance[1]))
 
-
-    print("######## Brute force with clustering of patients and doctor matching ########")
+    # print("######## Brute force with clustering of patients and doctor matching ########")
     cluster_ok = False
     i = 0
     while not cluster_ok:
@@ -53,14 +51,16 @@ def main() -> int:
             continue
     preferences = cluster_preferences(doctor_locations=doctor_locations, patient_clusters=clusters)
     matching = cluster_matching(preferences=preferences, num_doctors=num_doctors)
-    brute_force_cluster_solution = []
-    for i, doctor in enumerate(doctor_locations):
-        cluster = matching[i]
-        brute_force_cluster = brute_force_search(graph=turkey_map, patient_locations=clusters[cluster], doctor_locations=[doctor_locations[i]] )
-        brute_force_cluster_solution.append(brute_force_cluster[0])
-    brute_force_performance = evaluate(brute_force_cluster_solution, n_doctors=num_doctors)
-    print("Total distance travelled: {total_dist}".format(total_dist = brute_force_performance[0]))
-    print("Travel distance distribution index: {total_dist}\n\n".format(total_dist = brute_force_performance[1]))
+    # brute_force_cluster_solution = []
+    # for i, doctor in enumerate(doctor_locations):
+    #     cluster = matching[i]
+    #     brute_force_cluster = brute_force_search(graph=turkey_map, patient_locations=clusters[cluster], doctor_locations=[doctor_locations[i]] )
+    #     brute_force_cluster_solution.append(brute_force_cluster[0])
+    # brute_force_performance = evaluate(brute_force_cluster_solution, n_doctors=num_doctors)
+    # print("Total distance travelled: {total_dist}".format(total_dist = brute_force_performance[0]))
+    # print("Travel distance distribution index: {total_dist}\n\n".format(total_dist = brute_force_performance[1]))
+
+
     # Informed search: we have x and y coordinates of each city. Use clustering to create a collection of patients for each doctor.
     # Distribute clusters between doctors.
     # Create a minimal spanning tree for each doctor (Prim/Kruskal)
