@@ -35,7 +35,6 @@ def main() -> int:
     print("Total distance travelled: {total_dist}".format(total_dist = brute_force_performance[0]))
     print("Travel distance distribution index: {total_dist}\n\n".format(total_dist = brute_force_performance[1]))
 
-    # print("######## Brute force with clustering of patients and doctor matching ########")
     cluster_ok = False
     i = 0
     while not cluster_ok:
@@ -54,32 +53,17 @@ def main() -> int:
     preferences = cluster_preferences(doctor_locations=doctor_locations, patient_clusters=clusters)
     matching = cluster_matching(preferences=preferences, num_doctors=num_doctors)
 
+    print("######## Gradient method result ########")
     gradient_solution = []
     for i, doctor in enumerate(doctor_locations):
         cluster = matching[i]
         assigned_patients = clusters[cluster]
-
-        runs = 0
-        gradient_failure = False
-        while not gradient_failure:
-            try:
-                runs += 1
-                solution = gradient_descent(doctor_location=doctor, patient_list=assigned_patients, graph=turkey_map)
-                # if runs > 20:
-                #     gradient_failure = True
-                if not solution:
-                    raise ValueError
-                break
-            except:
-                print("[INFO] Algorithm runtime too long. Retrying.")
-
+        solution = gradient_descent(doctor_location=doctor, patient_list=assigned_patients, graph=turkey_map)
         gradient_solution.append(solution)
-    if None in gradient_solution:
-        print("[INFO] Gradient algorithm failed.")
-    else:
-        gradient_performance = evaluate(solution=gradient_solution, n_doctors=num_doctors)
-        print("Total distance travelled: {total_dist}".format(total_dist = gradient_performance[0]))
-        print("Travel distance distribution index: {total_dist}\n\n".format(total_dist = gradient_performance[1]))
+
+    gradient_performance = evaluate(solution=gradient_solution, n_doctors=num_doctors)
+    print("Total distance travelled: {total_dist}".format(total_dist = gradient_performance[0]))
+    print("Travel distance distribution index: {total_dist}\n\n".format(total_dist = gradient_performance[1]))
 
     # Informed search: we have x and y coordinates of each city. Use clustering to create a collection of patients for each doctor.
     # Distribute clusters between doctors.
