@@ -58,14 +58,14 @@ def gradient_descent(doctor_location, patient_list, graph):
             # Remove visited patient from patient list
             patient_list.remove(best_neighbor)
 
+        # Update recently visited cities, remove the least recent one.
         past_steps.append(doctor_location)
         past_steps.pop(0)
 
+        # Make doctor step
         doctor_step = {"location": best_neighbor, "step length": best_neighbor_steplength}
         solution.append(doctor_step)
         doctor_location = best_neighbor
-
-        ts = time.time_ns()
 
     return solution
 
