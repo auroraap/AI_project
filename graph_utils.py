@@ -39,6 +39,15 @@ def build_graph(filename):
     return graph
 
 def evaluate(solution, n_doctors):
+    """ Evaluates TSP solution.
+
+    Parameters:
+        solution: list of steps made by the doctors.
+        n_doctors: number of doctors in problem.
+    
+    Returns:
+        total distance travelled and gini index indicating distribution of steps between the doctors.
+    """
     total_distance = 0
     doctor_distance = [0] * n_doctors
     for doctor_index, doctor_solution in enumerate(solution):
@@ -99,6 +108,16 @@ def city_distance_estimate(lon1, lat1, lon2, lat2):
     return distance_estimate
 
 def kmeans(json_filename, patient_locations, k):
+    """ Clusters patient locations.
+
+    Parameters:
+        json_filename: json file containing the coordinates of each city.
+        patient_locations: list of locations for each patient.
+        k: number of clusters to be made
+    
+    Returns:
+        List of k patient location lists.
+    """
     # Read json
     with open(json_filename, 'r') as f:
         coordinates = json.load(f)
@@ -154,6 +173,13 @@ def kmeans(json_filename, patient_locations, k):
     return clusters
         
 def visualize(turkey_map, clusters, doctors):
+    """ Builds a networkx graph and visualizes it.
+
+    Parameters:
+        turkey_map: graph in dictionary structure.
+        clusters: 2d list containing the clustered patient list.
+        doctors: the location of the doctors.
+    """
     G = nx.Graph()
     G.add_nodes_from(turkey_map.keys())
     pos = nx.spring_layout(G)
