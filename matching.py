@@ -28,7 +28,6 @@ def cluster_preferences(doctor_locations, patient_clusters):
         
         preferences[doc_idx] = [i[0] for i in sorted(enumerate(nearest_patient_dist), key=lambda x:x[1])]
     
-    print(preferences)
     return preferences
 
 def cluster_matching(preferences, num_doctors):
@@ -53,6 +52,5 @@ def cluster_matching(preferences, num_doctors):
                     if assigned:
                         break
     
-    print(assigned_clusters)
     return assigned_clusters
                     

@@ -4,6 +4,7 @@ import sys
 from graph_utils import build_graph, get_coordinates, kmeans, visualize, evaluate
 from search_algorithms.brute_force import brute_force_search
 from matching import cluster_matching, cluster_preferences
+from search_algorithms.gradient_descent import gradient_descent
 
 def main() -> int:
     # Build map from dataset
@@ -17,6 +18,7 @@ def main() -> int:
     num_cities = len(turkey_map)
     num_patients = 40
     num_doctors = 3
+
     patient_locations = random.choices(list(turkey_map.keys()), k=num_patients)
     doctor_locations = random.choices(list(turkey_map.keys()), k=num_doctors)
 
@@ -46,20 +48,38 @@ def main() -> int:
                     # Ensure quite even patient distribution
                     raise(ValueError)
             cluster_ok = True
-            visualize(turkey_map=turkey_map, clusters=clusters, doctors=doctor_locations)
+            # visualize(turkey_map=turkey_map, clusters=clusters, doctors=doctor_locations)
         except:
             continue
     preferences = cluster_preferences(doctor_locations=doctor_locations, patient_clusters=clusters)
     matching = cluster_matching(preferences=preferences, num_doctors=num_doctors)
-    # brute_force_cluster_solution = []
-    # for i, doctor in enumerate(doctor_locations):
-    #     cluster = matching[i]
-    #     brute_force_cluster = brute_force_search(graph=turkey_map, patient_locations=clusters[cluster], doctor_locations=[doctor_locations[i]] )
-    #     brute_force_cluster_solution.append(brute_force_cluster[0])
-    # brute_force_performance = evaluate(brute_force_cluster_solution, n_doctors=num_doctors)
-    # print("Total distance travelled: {total_dist}".format(total_dist = brute_force_performance[0]))
-    # print("Travel distance distribution index: {total_dist}\n\n".format(total_dist = brute_force_performance[1]))
 
+    gradient_solution = []
+    for i, doctor in enumerate(doctor_locations):
+        cluster = matching[i]
+        assigned_patients = clusters[cluster]
+
+        runs = 0
+        gradient_failure = False
+        while not gradient_failure:
+            try:
+                runs += 1
+                solution = gradient_descent(doctor_location=doctor, patient_list=assigned_patients, graph=turkey_map)
+                # if runs > 20:
+                #     gradient_failure = True
+                if not solution:
+                    raise ValueError
+                break
+            except:
+                print("[INFO] Algorithm runtime too long. Retrying.")
+
+        gradient_solution.append(solution)
+    if None in gradient_solution:
+        print("[INFO] Gradient algorithm failed.")
+    else:
+        gradient_performance = evaluate(solution=gradient_solution, n_doctors=num_doctors)
+        print("Total distance travelled: {total_dist}".format(total_dist = gradient_performance[0]))
+        print("Travel distance distribution index: {total_dist}\n\n".format(total_dist = gradient_performance[1]))
 
     # Informed search: we have x and y coordinates of each city. Use clustering to create a collection of patients for each doctor.
     # Distribute clusters between doctors.

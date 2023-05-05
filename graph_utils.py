@@ -142,7 +142,6 @@ def kmeans(json_filename, patient_locations, k):
         
         # Check stopping criteria
         if (( new_centroid_long == centroid_long ) and ( new_centroid_lat == centroid_lat )) or ( n_iter == 20 ):
-            # print('Number of iterations for clustering: {n_iter}'.format(n_iter=n_iter))
             stop = True
         # Update centroids
         else:
@@ -155,7 +154,6 @@ def kmeans(json_filename, patient_locations, k):
     return clusters
         
 def visualize(turkey_map, clusters, doctors):
-    print(clusters)
     G = nx.Graph()
     G.add_nodes_from(turkey_map.keys())
     pos = nx.spring_layout(G)
@@ -170,7 +168,7 @@ def visualize(turkey_map, clusters, doctors):
             if node in doctors:
                 color_assigned = colors[-2]
         color_map.append(color_assigned)
-    print(len(color_map))
+
     for location in turkey_map:
         for index, neighbor in enumerate(turkey_map[location]['neighbors']):
             # if not G.has_edge(location, neighbor):
