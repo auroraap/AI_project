@@ -4,6 +4,16 @@ import time
 from graph_utils import city_distance_estimate
 
 def gradient_descent(doctor_location, patient_list, graph):
+    """ Solves the TSP with a gradient descent-like approach.
+    
+    Parameters:
+        graph: graph containing nodes with lists of neighbors and distances.
+        patient_list: list of the locations of each patient.
+        doctor_location: the location of the doctor.
+    
+    Returns:
+        A list containing all the steps that the doctor made.
+    """
     solution = []
     past_steps = ["", "", ""]
     
@@ -60,6 +70,15 @@ def gradient_descent(doctor_location, patient_list, graph):
     return solution
 
 def total_distance(doctor_location, patient_list):
+    """ Computes the distance between one location and all locations in a list.
+    
+    Parameters:
+        patient_list: list of the locations of each patient.
+        doctor_location: the location of the doctor.
+    
+    Returns:
+        The sum of the distances.
+    """
     with open('turkey_coordinates.json', 'r') as f:
         coordinates = json.load(f)
     
