@@ -14,6 +14,7 @@ def gradient_descent(doctor_location, patient_list, graph):
     Returns:
         A list containing all the steps that the doctor made.
     """
+    start_ts = time.time()
     solution = []
     past_steps = ["", "", ""]
     
@@ -48,9 +49,12 @@ def gradient_descent(doctor_location, patient_list, graph):
                 best_neighbor = neighbor
                 break
 
-        if not best_neighbor:
+        if (best_neighbor == None):
             # If all neighbors have been recently visited, choose next step at random
-            best_neighbor = random.choice(graph[doctor_location]["neighbors"])
+            forbidden_step = past_steps[-1]
+            if (forbidden_step in neighbor_list) and (len(neighbor_list) > 1):
+                neighbor_list.remove(forbidden_step)
+            best_neighbor = random.choice(neighbor_list)
             neighbor_index = graph[doctor_location]["neighbors"].index(best_neighbor)
 
         best_neighbor_steplength = graph[doctor_location]["distances"][neighbor_index]
@@ -67,6 +71,31 @@ def gradient_descent(doctor_location, patient_list, graph):
         doctor_step = {"location": best_neighbor, "step length": best_neighbor_steplength}
         solution.append(doctor_step)
         doctor_location = best_neighbor
+
+        ts = time.time()
+
+        reoccurrence = False
+        for location in past_steps:
+            if past_steps.count(location) >= 2:
+                reoccurrence = True
+        
+        if reoccurrence:
+            # walk 3 random steps to get out of stuck state
+            print("[DEBUG] Illigal amounts of revisiting. Walking 2 random steps.")
+            for i in range(2):
+                next_step = random.choice(graph[doctor_location]["neighbors"])
+                step_index = graph[doctor_location]["neighbors"].index(next_step)
+                steplength = graph[doctor_location]["distances"][step_index]
+
+                past_steps.append(doctor_location)
+                past_steps.pop(0)
+
+                doctor_step = {"location": next_step, "step length": steplength}
+                solution.append(doctor_step)
+                doctor_location = next_step
+            start_ts = time.time()
+
+
 
     return solution
 

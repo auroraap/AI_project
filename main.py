@@ -65,11 +65,6 @@ def main() -> int:
     print("Total distance travelled: {total_dist}".format(total_dist = gradient_performance[0]))
     print("Travel distance distribution index: {total_dist}\n\n".format(total_dist = gradient_performance[1]))
 
-    # Informed search: we have x and y coordinates of each city. Use clustering to create a collection of patients for each doctor.
-    # Distribute clusters between doctors.
-    # Create a minimal spanning tree for each doctor (Prim/Kruskal)
-    # Let each doctor traverse the MST to visit their patients
-
     return 0
 
 if __name__ == '__main__':
