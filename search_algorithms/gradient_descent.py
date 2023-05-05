@@ -44,6 +44,7 @@ def gradient_descent(doctor_location, patient_list, graph):
             neighbor = neighbor_list[neighbor_index]
 
             if not neighbor in past_steps:
+                # Avoid cycles by not allowing re-visiting of the 3 most recent nodes
                 best_neighbor = neighbor
                 break
 
