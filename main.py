@@ -6,7 +6,7 @@ from search_algorithms.brute_force import brute_force_search
 from matching import cluster_matching, cluster_preferences
 from search_algorithms.gradient_descent import gradient_descent
 
-NUM_RUNS = 5
+NUM_RUNS = 10
 PRINT = False
 
 def main() -> int:
@@ -23,10 +23,9 @@ def main() -> int:
     num_doctors = 3
 
     # Initialize performance numbers
-    brute_force_distance = 0
-    brute_force_gini = 0
-    gradient_distance = 0
-    gradient_gini = 0
+    brute_force_distance, brute_force_gini = 0, 0
+    gradient_distance, gradient_gini = 0, 0
+    nn_distance, nn_gini = 0, 0
 
     for i in range (NUM_RUNS):
         patient_locations = random.choices(list(turkey_map.keys()), k=num_patients)
@@ -77,6 +76,9 @@ def main() -> int:
         gradient_performance = evaluate(solution=gradient_solution, n_doctors=num_doctors)
         gradient_distance += gradient_performance[0]
         gradient_gini += gradient_performance[1]
+
+        # ~~~~~~~~~~~~~~~ RUN NEAREST NEIGHBOR ~~~~~~~~~~~~~~~
+        # Placeholder for nn
         
     print("\n######## RESULTS after {n} runs ########\n".format(n = NUM_RUNS))
 
@@ -87,6 +89,10 @@ def main() -> int:
     print("~~~~~~ Gradient method result ~~~~~~")
     print("Avg. Total distance travelled: {total_dist}".format(total_dist = gradient_distance / NUM_RUNS))
     print("Avg. Travel distance distribution index: {total_dist}\n".format(total_dist = gradient_gini / NUM_RUNS))
+
+    print("~~~~~~ Nearest neighbor result ~~~~~~")
+    print("Avg. Total distance travelled: {total_dist}".format(total_dist = nn_distance / NUM_RUNS))
+    print("Avg. Travel distance distribution index: {total_dist}\n".format(total_dist = nn_gini / NUM_RUNS))
 
     return 0
 
