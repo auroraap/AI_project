@@ -12,7 +12,6 @@ def brute_force_search(graph, patient_locations, doctor_locations):
     Returns:
         A list containing all the steps that each doctor made.
     """
-    start_timespamp = time.time_ns()
 
     solution = [[] for i in range(len(doctor_locations)) ]
 
@@ -49,8 +48,5 @@ def brute_force_search(graph, patient_locations, doctor_locations):
                 
             # add location to solution
             solution[doctor_index].append(doctor_step)
-
-    end_timespamp = time.time_ns()
-    print("Runtime in ns: {runtime}".format(runtime=end_timespamp-start_timespamp))
 
     return solution
