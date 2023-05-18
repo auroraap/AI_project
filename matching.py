@@ -2,6 +2,15 @@ import json
 from graph_utils import city_distance_estimate
 
 def cluster_preferences(doctor_locations, patient_clusters):
+    """ Generates preferences of the doctors towards the patient clusters.
+    
+    Parameters:
+        doctor locations: the location of each doctor.
+        patient_clusters: list of the locations of each patient in every patient cluster.
+    
+    Returns:
+        A list of preferences for every doctor.
+    """
     with open('turkey_coordinates.json', 'r') as f:
         coordinates = json.load(f)
 
@@ -31,7 +40,15 @@ def cluster_preferences(doctor_locations, patient_clusters):
     return preferences
 
 def cluster_matching(preferences, num_doctors):
-
+    """ Implementation of Gale-Shapely to find a stable doctor/patient list matching.
+    
+    Parameters:
+        num_doctors: the number of doctors.
+        preferences: list containing the patient list preferences of each doctor.
+    
+    Returns:
+        A matching of doctors and patient clusters.
+    """
     assigned_clusters = [None for i in range(num_doctors)]
 
     while None in assigned_clusters:
