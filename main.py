@@ -5,8 +5,9 @@ from graph_utils import build_graph, get_coordinates, kmeans, visualize, evaluat
 from search_algorithms.brute_force import brute_force_search
 from matching import cluster_matching, cluster_preferences
 from search_algorithms.gradient_descent import gradient_descent
+from search_algorithms.nearest_neighbor import nearest_neighbor_search
 
-NUM_RUNS = 10
+NUM_RUNS = 1
 PRINT = False
 
 def main() -> int:
@@ -28,6 +29,7 @@ def main() -> int:
     nn_distance, nn_gini = 0, 0
 
     for i in range (NUM_RUNS):
+        print("Run number {n}.".format(n=i+1))
         patient_locations = random.choices(list(turkey_map.keys()), k=num_patients)
         doctor_locations = random.choices(list(turkey_map.keys()), k=num_doctors)
 
@@ -40,7 +42,7 @@ def main() -> int:
             print("Patient locations (repetition allowed): {patient_locations}\n\n".format(patient_locations=patient_locations))
 
         # ~~~~~~~~~~~~~~~ RUN BRUTE FORCE ~~~~~~~~~~~~~~~
-        brute_force_solution = brute_force_search(graph=turkey_map, patient_locations=patient_locations, doctor_locations=doctor_locations)
+        brute_force_solution = brute_force_search(graph=turkey_map, patient_locations=patient_locations.copy(), doctor_locations=doctor_locations)
         brute_force_performance = evaluate(brute_force_solution, num_doctors)
         brute_force_distance += brute_force_performance[0]
         brute_force_gini += brute_force_performance[1]
@@ -58,18 +60,17 @@ def main() -> int:
                         # Ensure quite even patient distribution
                         raise(ValueError)
                 cluster_ok = True
-                # visualize(turkey_map=turkey_map, clusters=clusters, doctors=doctor_locations)
+                
             except:
                 continue
         preferences = cluster_preferences(doctor_locations=doctor_locations, patient_clusters=clusters)
         matching = cluster_matching(preferences=preferences, num_doctors=num_doctors)
 
         # ~~~~~~~~~~~~~~~ RUN GRADIENT ~~~~~~~~~~~~~~~
-        
         gradient_solution = []
         for i, doctor in enumerate(doctor_locations):
             cluster = matching[i]
-            assigned_patients = clusters[cluster]
+            assigned_patients = clusters[cluster].copy()
             solution = gradient_descent(doctor_location=doctor, patient_list=assigned_patients, graph=turkey_map)
             gradient_solution.append(solution)
 
@@ -78,7 +79,16 @@ def main() -> int:
         gradient_gini += gradient_performance[1]
 
         # ~~~~~~~~~~~~~~~ RUN NEAREST NEIGHBOR ~~~~~~~~~~~~~~~
-        # Placeholder for nn
+        nn_solution = []
+        for i, doctor in enumerate(doctor_locations):
+            cluster = matching[i]
+            assigned_patients = clusters[cluster].copy()
+            solution = nearest_neighbor_search(doctor_location=doctor, patient_list=assigned_patients, graph=turkey_map)
+            nn_solution.append(solution)
+
+        nn_performance = evaluate(solution=nn_solution, n_doctors=num_doctors)
+        nn_distance += nn_performance[0]
+        nn_gini += nn_performance[1]
         
     print("\n######## RESULTS after {n} runs ########\n".format(n = NUM_RUNS))
 
@@ -93,6 +103,8 @@ def main() -> int:
     print("~~~~~~ Nearest neighbor result ~~~~~~")
     print("Avg. Total distance travelled: {total_dist}".format(total_dist = nn_distance / NUM_RUNS))
     print("Avg. Travel distance distribution index: {total_dist}\n".format(total_dist = nn_gini / NUM_RUNS))
+
+    visualize(turkey_map=turkey_map, clusters=clusters, doctors=doctor_locations, solutions=nn_solution)
 
     return 0
 

@@ -172,7 +172,7 @@ def kmeans(json_filename, patient_locations, k):
 
     return clusters
         
-def visualize(turkey_map, clusters, doctors):
+def visualize(turkey_map, clusters, doctors, solutions = []):
     """ Builds a networkx graph and visualizes it.
 
     Parameters:
@@ -184,6 +184,7 @@ def visualize(turkey_map, clusters, doctors):
     G.add_nodes_from(turkey_map.keys())
     pos = nx.spring_layout(G)
     colors = ['#cc99ff', '#0099ff', '#ffcc00', '#ff0000', '#d9d9d9']
+    edge_colors = []
 
     color_map = []
     for node in G:
@@ -198,7 +199,14 @@ def visualize(turkey_map, clusters, doctors):
     for location in turkey_map:
         for index, neighbor in enumerate(turkey_map[location]['neighbors']):
             # if not G.has_edge(location, neighbor):
+            # edge_color = '#000000'
+            # for s, solution in enumerate(solutions):
+            #     for step in range(len(solution)-1):
+            #         #print("{a}, {b}, {c}, {d}".format(a=location, b=neighbor, c=solution[step]["location"], d=solution[step+1]["location"]))
+            #         if ((solution[step]["location"] == location) or (solution[step]["location"] == neighbor)) and  ((solution[step+1]["location"] == location) or (solution[step+1]["location"] == neighbor)):
+            #             edge_color = colors[s]
             G.add_edge(location, neighbor, weight=turkey_map[location]['distances'][index])
+            # edge_colors.append(edge_color)
     
     nx.draw(G, node_color=color_map, with_labels=True, node_size=50, node_shape="s", alpha=0.6, linewidths=10, font_size=6)
     plt.show()

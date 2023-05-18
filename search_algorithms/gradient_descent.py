@@ -15,7 +15,7 @@ def gradient_descent(doctor_location, patient_list, graph):
         A list containing all the steps that the doctor made.
     """
     solution = []
-    past_steps = ["", "", ""]
+    past_steps = ["", "", "", ""]
     
     while patient_list != []:
         # Loop while there are unvisited patients
