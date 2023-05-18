@@ -16,6 +16,10 @@ def gradient_descent(doctor_location, patient_list, graph):
     """
     solution = []
     past_steps = ["", "", "", ""]
+    if doctor_location in patient_list:
+        patient_list.remove(doctor_location)
+    doctor_step = {"location": doctor_location, "step length": 0}
+    solution.append(doctor_step)
     
     while patient_list != []:
         # Loop while there are unvisited patients

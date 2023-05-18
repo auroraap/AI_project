@@ -7,7 +7,12 @@ def nearest_neighbor_search(doctor_location, patient_list, graph):
         coordinates = json.load(f)
 
     solution = []
+    doctor_step = {"location": doctor_location, "step length": 0}
+    solution.append(doctor_step)
     past_steps = ["", "", "", ""]
+    if doctor_location in patient_list:
+        patient_list.remove(doctor_location)
+        
     while patient_list != []:
         neighborFound = False
         reoccurrence = False
