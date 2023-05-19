@@ -106,8 +106,7 @@ def main() -> int:
     print("Avg. Total distance travelled: {total_dist}".format(total_dist = nn_distance / NUM_RUNS))
     print("Avg. Travel distance distribution index: {total_dist}\n".format(total_dist = nn_gini / NUM_RUNS))
 
-    print(nn_solution)
-    visualize(turkey_map=turkey_map, clusters=clusters, doctors=doctor_locations, solutions=nn_solution)
+    # visualize(turkey_map=turkey_map, clusters=clusters, doctors=doctor_locations, solutions=nn_solution)
 
     return 0
 
