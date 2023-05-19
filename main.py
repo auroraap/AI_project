@@ -1,5 +1,6 @@
 import random
 import sys
+import statistics
 
 from graph_utils import build_graph, get_coordinates, kmeans, visualize, evaluate, clean_solution
 from search_algorithms.brute_force import brute_force_search
@@ -7,7 +8,7 @@ from matching import cluster_matching, cluster_preferences
 from search_algorithms.gradient_descent import gradient_descent
 from search_algorithms.nearest_neighbor import nearest_neighbor_search
 
-NUM_RUNS = 1
+NUM_RUNS = 2
 PRINT = False
 
 def main() -> int:
@@ -24,9 +25,9 @@ def main() -> int:
     num_doctors = 3
 
     # Initialize performance numbers
-    brute_force_distance, brute_force_gini = 0, 0
-    gradient_distance, gradient_gini = 0, 0
-    nn_distance, nn_gini = 0, 0
+    brute_force_distance, brute_force_gini = [], 0
+    gradient_distance, gradient_gini = [], 0
+    nn_distance, nn_gini = [], 0
 
     for i in range (NUM_RUNS):
         print("Run number {n}.".format(n=i+1))
@@ -44,7 +45,7 @@ def main() -> int:
         # ~~~~~~~~~~~~~~~ RUN BRUTE FORCE ~~~~~~~~~~~~~~~
         brute_force_solution = brute_force_search(graph=turkey_map, patient_locations=patient_locations.copy(), doctor_locations=doctor_locations)
         brute_force_performance = evaluate(brute_force_solution, num_doctors)
-        brute_force_distance += brute_force_performance[0]
+        brute_force_distance.append(brute_force_performance[0])
         brute_force_gini += brute_force_performance[1]
 
         # ~~~~~~~~~~~~~~~ RUN PATIENT CLUSTERING ~~~~~~~~~~~~~~~
@@ -71,12 +72,12 @@ def main() -> int:
         for i, doctor in enumerate(doctor_locations):
             cluster = matching[i]
             assigned_patients = clusters[cluster].copy()
-            search = gradient_descent(doctor_location=doctor, patient_list=assigned_patients.copy(), graph=turkey_map)
-            solution = clean_solution(search, assigned_patients.copy())
+            solution = gradient_descent(doctor_location=doctor, patient_list=assigned_patients.copy(), graph=turkey_map)
+            # solution = clean_solution(search, assigned_patients.copy())
             gradient_solution.append(solution)
 
         gradient_performance = evaluate(solution=gradient_solution, n_doctors=num_doctors)
-        gradient_distance += gradient_performance[0]
+        gradient_distance.append(gradient_performance[0])
         gradient_gini += gradient_performance[1]
 
         # ~~~~~~~~~~~~~~~ RUN NEAREST NEIGHBOR ~~~~~~~~~~~~~~~
@@ -84,26 +85,29 @@ def main() -> int:
         for i, doctor in enumerate(doctor_locations):
             cluster = matching[i]
             assigned_patients = clusters[cluster].copy()
-            search = nearest_neighbor_search(doctor_location=doctor, patient_list=assigned_patients.copy(), graph=turkey_map)
-            solution = clean_solution(search, assigned_patients.copy())
+            solution = nearest_neighbor_search(doctor_location=doctor, patient_list=assigned_patients.copy(), graph=turkey_map)
+            # solution = clean_solution(search, assigned_patients.copy())
             nn_solution.append(solution)
 
         nn_performance = evaluate(solution=nn_solution, n_doctors=num_doctors)
-        nn_distance += nn_performance[0]
+        nn_distance.append(nn_performance[0])
         nn_gini += nn_performance[1]
         
     print("\n######## RESULTS after {n} runs ########\n".format(n = NUM_RUNS))
 
     print("~~~~~~ Brute force result ~~~~~~")
-    print("Avg. Total distance travelled: {total_dist}".format(total_dist = brute_force_distance / NUM_RUNS))
+    print("Avg. Total distance travelled: {total_dist}".format(total_dist = sum(brute_force_distance) / len(brute_force_distance)))
+    print("Variance in distance travelled: {var}".format(var=statistics.variance(brute_force_distance)))
     print("Avg. Travel distance distribution index: {total_dist}\n".format(total_dist = brute_force_gini / NUM_RUNS))
 
     print("~~~~~~ Gradient method result ~~~~~~")
-    print("Avg. Total distance travelled: {total_dist}".format(total_dist = gradient_distance / NUM_RUNS))
+    print("Avg. Total distance travelled: {total_dist}".format(total_dist = sum(gradient_distance) / len(gradient_distance)))
+    print("Variance in distance travelled: {var}".format(var=statistics.variance(gradient_distance)))
     print("Avg. Travel distance distribution index: {total_dist}\n".format(total_dist = gradient_gini / NUM_RUNS))
 
     print("~~~~~~ Nearest neighbor result ~~~~~~")
-    print("Avg. Total distance travelled: {total_dist}".format(total_dist = nn_distance / NUM_RUNS))
+    print("Avg. Total distance travelled: {total_dist}".format(total_dist = sum(nn_distance) / len(nn_distance)))
+    print("Variance in distance travelled: {var}".format(var=statistics.variance(nn_distance)))
     print("Avg. Travel distance distribution index: {total_dist}\n".format(total_dist = nn_gini / NUM_RUNS))
 
     # visualize(turkey_map=turkey_map, clusters=clusters, doctors=doctor_locations, solutions=nn_solution)
