@@ -20,9 +20,11 @@ def nearest_neighbor_search(doctor_location, patient_list, graph):
     solution = []
     doctor_step = {"location": doctor_location, "step length": 0}
     solution.append(doctor_step)
-    past_steps = ["", "", "", ""]
+    past_steps = ["", "", ""]
     if doctor_location in patient_list:
-        patient_list.remove(doctor_location)
+        # patient_list.remove(doctor_location)
+        while doctor_location in patient_list:
+            patient_list.remove(doctor_location)
 
     while patient_list != []:
         # Run while there are unvisited patients
@@ -54,7 +56,9 @@ def nearest_neighbor_search(doctor_location, patient_list, graph):
         
         if best_neighbor in patient_list:
             # Remove visited patient
-            patient_list.remove(best_neighbor)
+            # patient_list.remove(best_neighbor)
+            while best_neighbor in patient_list:
+                patient_list.remove(best_neighbor)
 
         # Store step in solution
         doctor_step = {"location": best_neighbor, "step length": best_neighbor_dist}
@@ -62,7 +66,7 @@ def nearest_neighbor_search(doctor_location, patient_list, graph):
         past_steps.append(doctor_location)
         past_steps.pop(0)
         doctor_location = best_neighbor
-        
+    
     return solution
 
 def get_nearest_patient(coordinates, doctor_location, patient_list):

@@ -17,7 +17,9 @@ def gradient_descent(doctor_location, patient_list, graph):
     solution = []
     past_steps = ["", "", "", ""]
     if doctor_location in patient_list:
-        patient_list.remove(doctor_location)
+        # patient_list.remove(doctor_location)
+        while doctor_location in patient_list:
+            patient_list.remove(doctor_location)
     doctor_step = {"location": doctor_location, "step length": 0}
     solution.append(doctor_step)
     
@@ -64,7 +66,9 @@ def gradient_descent(doctor_location, patient_list, graph):
         
         if best_neighbor in patient_list:
             # Remove visited patient from patient list
-            patient_list.remove(best_neighbor)
+            # patient_list.remove(best_neighbor)
+            while best_neighbor in patient_list:
+                patient_list.remove(best_neighbor)
 
         # Update recently visited cities, remove the least recent one.
         past_steps.append(doctor_location)
@@ -79,6 +83,8 @@ def gradient_descent(doctor_location, patient_list, graph):
         for location in past_steps:
             if past_steps.count(location) >= 2:
                 reoccurrence = True
+                # Bør vi da fjerne de to stegene før fra løsningen? Slik at løsningen ikke er hele søkeprosessen?
+                
         
         if reoccurrence:
             # walk 3 random steps to get out of stuck state

@@ -199,15 +199,36 @@ def visualize(turkey_map, clusters, doctors, solutions = []):
     for location in turkey_map:
         for index, neighbor in enumerate(turkey_map[location]['neighbors']):
             # if not G.has_edge(location, neighbor):
-            # edge_color = '#000000'
-            # for s, solution in enumerate(solutions):
-            #     for step in range(len(solution)-1):
-            #         #print("{a}, {b}, {c}, {d}".format(a=location, b=neighbor, c=solution[step]["location"], d=solution[step+1]["location"]))
-            #         if ((solution[step]["location"] == location) or (solution[step]["location"] == neighbor)) and  ((solution[step+1]["location"] == location) or (solution[step+1]["location"] == neighbor)):
-            #             edge_color = colors[s]
+            edge_color = '#C0C0C0'
+            for s, solution in enumerate(solutions):
+                for step in range(len(solution)-1):
+                    #print("{a}, {b}, {c}, {d}".format(a=location, b=neighbor, c=solution[step]["location"], d=solution[step+1]["location"]))
+                    if ((solution[step]["location"] == location) or (solution[step]["location"] == neighbor)) and  ((solution[step+1]["location"] == location) or (solution[step+1]["location"] == neighbor)):
+                        edge_color = colors[s]
             G.add_edge(location, neighbor, weight=turkey_map[location]['distances'][index])
-            # edge_colors.append(edge_color)
+            edge_colors.append(edge_color)
     
-    nx.draw(G, node_color=color_map, with_labels=True, node_size=50, node_shape="s", alpha=0.6, linewidths=10, font_size=6)
+    nx.draw(G, node_color=color_map, with_labels=True, node_size=50, node_shape="s", alpha=0.6, linewidths=10, font_size=6, edge_color=edge_colors)
     plt.show()
     
+
+def clean_solution(solution, patient_list):
+    n_steps = len(solution)
+    new_sol = []
+    new_sol.append(solution[0])
+    new_sol.append(solution[1])
+    for step_num, step in enumerate(solution):
+        if (step_num < n_steps - 2):
+            new_sol.append(solution[step_num+2])
+        if (step_num < n_steps - 2) and (solution[step_num]['location'] == solution[step_num+2]['location']) and (solution[step_num+1]['location'] not in patient_list):
+            # Remove steps that are repeated IF the middle step does not contain a patient
+            new_sol.pop(-2)
+            new_sol.pop(-1)
+
+        if solution[step_num]['location'] in patient_list:
+            # Keep track of visited patients
+            while solution[step_num]['location'] in patient_list:
+                patient_list.remove(solution[step_num]['location'])
+        if patient_list == []:
+            break
+    return new_sol

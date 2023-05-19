@@ -1,7 +1,7 @@
 import random
 import sys
 
-from graph_utils import build_graph, get_coordinates, kmeans, visualize, evaluate
+from graph_utils import build_graph, get_coordinates, kmeans, visualize, evaluate, clean_solution
 from search_algorithms.brute_force import brute_force_search
 from matching import cluster_matching, cluster_preferences
 from search_algorithms.gradient_descent import gradient_descent
@@ -71,7 +71,8 @@ def main() -> int:
         for i, doctor in enumerate(doctor_locations):
             cluster = matching[i]
             assigned_patients = clusters[cluster].copy()
-            solution = gradient_descent(doctor_location=doctor, patient_list=assigned_patients, graph=turkey_map)
+            search = gradient_descent(doctor_location=doctor, patient_list=assigned_patients.copy(), graph=turkey_map)
+            solution = clean_solution(search, assigned_patients.copy())
             gradient_solution.append(solution)
 
         gradient_performance = evaluate(solution=gradient_solution, n_doctors=num_doctors)
@@ -83,7 +84,8 @@ def main() -> int:
         for i, doctor in enumerate(doctor_locations):
             cluster = matching[i]
             assigned_patients = clusters[cluster].copy()
-            solution = nearest_neighbor_search(doctor_location=doctor, patient_list=assigned_patients, graph=turkey_map)
+            search = nearest_neighbor_search(doctor_location=doctor, patient_list=assigned_patients.copy(), graph=turkey_map)
+            solution = clean_solution(search, assigned_patients.copy())
             nn_solution.append(solution)
 
         nn_performance = evaluate(solution=nn_solution, n_doctors=num_doctors)
@@ -104,8 +106,8 @@ def main() -> int:
     print("Avg. Total distance travelled: {total_dist}".format(total_dist = nn_distance / NUM_RUNS))
     print("Avg. Travel distance distribution index: {total_dist}\n".format(total_dist = nn_gini / NUM_RUNS))
 
-    # print(nn_solution)
-    # visualize(turkey_map=turkey_map, clusters=clusters, doctors=doctor_locations, solutions=nn_solution)
+    print(nn_solution)
+    visualize(turkey_map=turkey_map, clusters=clusters, doctors=doctor_locations, solutions=nn_solution)
 
     return 0
 
